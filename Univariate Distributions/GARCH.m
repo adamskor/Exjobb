@@ -33,7 +33,7 @@ function [z, eps, params] = GARCH(data, dist, plotting)
         eps(:, asset) = returns(:,asset) - mu;
         z(:, asset) = (eps(:, asset))./sqrt(var);
     end
-    
+    z = z(2:end,:);
     
     
     

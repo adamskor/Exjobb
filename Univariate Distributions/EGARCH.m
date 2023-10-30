@@ -5,7 +5,11 @@ function [z, eps, params] = GARCH(data, dist, plotting)
     returns = data.returns;
     z = zeros(size(returns,1), size(returns,2));
     eps = zeros(size(returns,1), size(returns,2));
-    
+    if dist == 't'
+        params = zeros(5, size(returns,2));
+    else
+        params = zeros(4, size(returns,2));
+    end
     N = max(size(returns));
     for asset = 1:size(returns, 2)
         mu = mean(returns(:,asset));
@@ -15,10 +19,10 @@ function [z, eps, params] = GARCH(data, dist, plotting)
         end
         EstMdl = estimate(Mdl,returns(:,asset));
         if dist == 't'
-            params = zeros(5, size(returns,2));
+            
             params(:, asset) = [EstMdl.Constant, EstMdl.ARCH{1} , EstMdl.GARCH{1}, EstMdl.Leverage{1}, EstMdl.Distribution.DoF];
         else
-            params = zeros(4, size(returns,2));
+            
             params(:, asset) = [EstMdl.Constant, EstMdl.ARCH{1} , EstMdl.GARCH{1}, EstMdl.Leverage{1}];
         end
         var = zeros(N,1);
@@ -39,6 +43,9 @@ function [z, eps, params] = GARCH(data, dist, plotting)
             
         
         z(:, asset) = (eps(:, asset))./sqrt(var);
+        end
+        
     end
+    z = z(2:end,:);
 end
 

@@ -10,8 +10,6 @@ Data.assets = assets;
 %[z_Gauss, params_Gauss] = Gaussian(Data);
 %[z_Student_t, params_Student_t] = Student_t(Data);
 [z_GARCH_G, eps, params_GARCH_G] = GARCH(Data, 'Gaussian', 1);
-
-
 [z_GARCH_t, ~, params_GARCH_t] = GARCH(Data, 't', 1);
 [z_EGARCH_G, ~, params_EGARCH_G] = EGARCH(Data, 'Gaussian', 1);
 [z_EGARCH_t, ~, params_EGARCH_t] = EGARCH(Data, 't', 1);
