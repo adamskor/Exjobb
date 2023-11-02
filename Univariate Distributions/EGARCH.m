@@ -1,8 +1,10 @@
-function [z, eps, params] = GARCH(data, dist, plotting)
+function [z, eps, params, LLV] = EGARCH(data, dist, plotting)
     %%%
     % If dist = t student t is assumed
     %%%
+    
     returns = data.returns;
+    LLV = zeros(1, size(returns,2));
     z = zeros(size(returns,1), size(returns,2));
     eps = zeros(size(returns,1), size(returns,2));
     if dist == 't'
@@ -17,13 +19,13 @@ function [z, eps, params] = GARCH(data, dist, plotting)
         if dist == 't'
             Mdl.Distribution = struct('Name','t', 'DoF', NaN);
         end
-        EstMdl = estimate(Mdl,returns(:,asset));
+        [EstMdl, ~, logL] = estimate(Mdl,returns(:,asset));
         if dist == 't'
             
-            params(:, asset) = [EstMdl.Constant, EstMdl.ARCH{1} , EstMdl.GARCH{1}, EstMdl.Leverage{1}, EstMdl.Distribution.DoF];
+            params(:, asset) = [EstMdl.Constant, EstMdl.GARCH{1} , EstMdl.Leverage{1}, EstMdl.ARCH{1}, EstMdl.Distribution.DoF];
         else
             
-            params(:, asset) = [EstMdl.Constant, EstMdl.ARCH{1} , EstMdl.GARCH{1}, EstMdl.Leverage{1}];
+            params(:, asset) = [EstMdl.Constant, EstMdl.GARCH{1} , EstMdl.Leverage{1}, EstMdl.ARCH{1}];
         end
         var = zeros(N,1);
         var(1)= sum(returns(:,asset).^2)/N;
@@ -31,20 +33,20 @@ function [z, eps, params] = GARCH(data, dist, plotting)
         for i=2:N
             if dist == 't'
                 var(i) = exp( params(1) + params(2)*(log(var(i-1))) + ...
-                         params(3)*(abs(eps(i-1)))/var(i-1) + ...
-                         params(4)*((abs(eps(i-1)))/var(i-1) - ...
+                         params(3)*((eps(i-1, asset)))/sqrt(var(i-1)) + ...
+                         params(4)*((abs(eps(i-1, asset)))/sqrt(var(i-1)) - ...
                          sqrt((EstMdl.Distribution.DoF - 2)/ pi)*(gamma((EstMdl.Distribution.DoF - 1)/2)/gamma((EstMdl.Distribution.DoF)/2))));
         
             else
                 var(i) = exp( params(1) + params(2)*(log(var(i-1))) + ...
-                         params(3)*(abs(eps(i-1)))/var(i-1) + ...
-                         params(4)*((abs(eps(i-1)))/var(i-1) - sqrt(2/pi)));
+                         params(3)*((eps(i-1, asset)))/sqrt(var(i-1)) + ...
+                         params(4)*((abs(eps(i-1, asset)))/sqrt(var(i-1)) - sqrt(2/pi)));
             end
             
         
         z(:, asset) = (eps(:, asset))./sqrt(var);
         end
-        
+    LLV(1, asset) = logL;
     end
     z = z(2:end,:);
 end

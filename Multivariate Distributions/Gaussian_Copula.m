@@ -1,15 +1,19 @@
 function [rho, eta_Gauss] = Gaussian_Copula(data)
+    count = 1;
     sample_size = 10000;
-    z = data.z_EGARCH_t;
-    uniform = zeros(size(z));
-    eta_Gauss = zeros(sample_size, size(z, 2));
-    for asset = 1:size(z, 2)
-        uniform(:, asset) = ksdensity(z(:, asset), z(:, asset), 'function', 'cdf');
+    z = data.z_GARCH_G;
+    uniform = normcdf(z);
+    for row = 1:size(z,1)
+        for col = 1:size(z,2)
+            if uniform(row, col) == 1
+                uniform(row, col) = 0.9999999999999999;
+                count = count + 1;
+            end
+        end
     end
     [rho] = copulafit('Gaussian',uniform);
-    sample = copularnd('Gaussian', rho, 10000);
-    for asset = 1:size(z, 2)
-        eta_Gauss(:, asset) = ksdensity(z(:, asset), sample(:, asset), 'function', 'icdf');
-    end
+    sample = copularnd('Gaussian', rho, sample_size);
+    eta_Gauss = norminv(sample);
+    disp(count)
 end
 

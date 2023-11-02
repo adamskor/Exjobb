@@ -5,9 +5,7 @@ function [] = QQ_plot(data)
         
         figure(i)
         subplot(2,2,1)
-        
-        pd_1 = fitdist(data.z_GARCH_G(:, i), 'Normal');
-        qqplot(data.z_GARCH_G(:, i), pd_1)
+        qqplot(data.z_GARCH_G(:, i))
         title(data.assets{i})
         
         
@@ -23,7 +21,7 @@ function [] = QQ_plot(data)
         end
         eps_OOS = data.returns_OOS(:, i) - mean(data.returns_OOS(:, i));
         z_OOS = eps_OOS./sqrt(var);
-        qqplot(z_OOS, pd_1)
+        qqplot(z_OOS)
         title(data.assets{i})
         
         
