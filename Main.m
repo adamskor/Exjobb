@@ -12,11 +12,11 @@ Data.assets = assets;
 %% Estimate univariate distribtuions and return i.i.d. z_t and relevant model parameters
 [z_Gauss, params_Gauss] = Gaussian(Data);
 [z_Student_t, params_Student_t] = Student_t(Data);
-%%
 [z_GARCH_G, eps, params_GARCH_G] = GARCH(Data, 'Gaussian', 1);
 [z_GARCH_t, ~, params_GARCH_t] = GARCH(Data, 't', 1);
 [z_EGARCH_G, ~, params_EGARCH_G] = EGARCH(Data, 'Gaussian', 1);
 [z_EGARCH_t, ~, params_EGARCH_t] = EGARCH(Data, 't', 1);
+%%% Save relevant data 
 Data.eps = eps;
 Data.z_GARCH_G = z_GARCH_G;
 Data.z_GARCH_t = z_GARCH_t;
@@ -27,8 +27,13 @@ Data.params_GARCH_t = params_GARCH_t;
 Data.params_EGARCH_G = params_EGARCH_G;
 Data.params_EGARCH_t = params_EGARCH_t;
 %%
+[rho, eta_Gauss] = Gaussian_Copula(Data);
 
-%%QQ_plot(Data);
+
+
+
+
+QQ_plot(Data);
 
 
 
