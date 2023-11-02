@@ -1,0 +1,12 @@
+function [returns_sim_GARCH_t_C_t] = simulateReturnsGARCH(Data);
+    sample_size = 10000;
+    eta = Data.eta_t;
+    params = Data.params_GARCH_t;
+    var(1) = 0.004;
+    eps(1) = sq
+    for asset = 1:size(eta, 2)
+        for t = 2:sample_size
+            
+            var(i) = params(1, asset) + params(2, asset)*(eps(i-1, asset))^2 + params(3, asset)*var(i-1);
+end
+
