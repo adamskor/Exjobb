@@ -1,19 +1,24 @@
-function [rho, eta_Gauss] = Gaussian_Copula(data)
+function [Data] = Gaussian_Copula(z, Data)
     count = 1;
-    sample_size = 10000;
-    z = data.z_GARCH_G;
+    sample_size = Data.Info.Parameters.simSampleSize;
     uniform = normcdf(z);
-    for row = 1:size(z,1)
-        for col = 1:size(z,2)
-            if uniform(row, col) == 1
-                uniform(row, col) = 0.9999999999999999;
-                count = count + 1;
+    rho = zeros(size(z,2), size(z,2), size(z,3));
+    sample = zeros(sample_size, size(z,2), size(z,3));
+    for window = 1:size(z, 3)
+        for row = 1:size(z,1)
+            for col = 1:size(z,2)
+                if uniform(row, col, window) == 1
+                    uniform(row, col, window) = 0.9999999999999999;
+                    count = count + 1;
+                end
             end
         end
     end
-    [rho] = copulafit('Gaussian',uniform);
-    sample = copularnd('Gaussian', rho, sample_size);
-    eta_Gauss = norminv(sample);
-    disp(count)
+    for window = 1:size(z, 3)
+        rho(:, :, window) = copulafit('Gaussian',uniform(:, : ,window));
+        sample(:, :, window) = copularnd('Gaussian', rho(:, :, window), sample_size);
+    end
+    Data.Copula.Gauss.Rho = rho;
+    Data.Copula.Gauss.eta = norminv(sample);
 end
 

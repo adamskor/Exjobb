@@ -12,6 +12,8 @@ clear all
 %           Prices, Returns, LogReturns, Dates, eps, epsLog
 %       Info:
 %           Assets
+%           Parameters:
+%               simSampleSize
 %       Univariate:
 %           Gauss:
 %               z, Params
@@ -25,6 +27,31 @@ clear all
 %               z, Params, LLV
 %           EGARCHt:
 %               z, Params, LLV
+%       Copula:
+%           Gauss:
+%               Rho, eta
+%           t:
+%               Rho, nu, eta
+%       Simulate:
+%           Gauss:
+%               GARCHGauss:
+%                   r
+%               GARCHt:
+%                   r
+%               EGARCHGauss:
+%                   r
+%               EGARCHt:
+%                   r
+%           t:
+%               GARCHGauss:
+%                   r
+%               GARCHt:
+%                   r
+%               EGARCHGauss:
+%                   r
+%               EGARCHt:
+%                   r
+%
 %%%
 %%
 [Data] = FormatData();
@@ -34,17 +61,28 @@ clear all
 [Data] = GARCHGauss(Data.TimeSeries.Returns, Data.TimeSeries.eps, Data);
 [Data] = GARCHt(Data.TimeSeries.Returns, Data.TimeSeries.eps, Data);
 [Data] = EGARCHGauss(Data.TimeSeries.Returns, Data.TimeSeries.eps, Data);
-[Data] = EGARCHt(Data.TimeSeries.Returns, Data.TimeSeries.eps, Data);
 %%
+[Data] = EGARCHt(Data.TimeSeries.Returns, Data.TimeSeries.eps, Data);
 
 %%
-[rho_G, eta_Gauss] = Gaussian_Copula(Data);
+[Data] = Gaussian_Copula(Data.Univariate.EGARCHt.z, Data);
+
+[Data] = Student_t_Copula(Data.Univariate.EGARCHt.z, Data.Univariate.EGARCHt.Params, Data);
+
+
 %%
-[rho_t, nu, eta_t] = Student_t_Copula(Data);
-Data.eta_t = eta_t;
-Data.eta_Gauss = eta_Gauss;
-%%
-[returns_sim_GARCH_G_C_G] = simulateReturnsGARCH(Data);
+Data.Simulate.Gauss.GARCHGauss.r = simulateReturnsGARCHGauss(Data.Copula.Gauss.eta, Data.Univariate.GARCHGauss.Params, Data);
+Data.Simulate.t.GARCHGauss.r = simulateReturnsGARCHGauss(Data.Copula.t.eta, Data.Univariate.GARCHGauss.Params, Data);
+
+Data.Simulate.Gauss.GARCHt.r = simulateReturnsGARCHGauss(Data.Copula.Gauss.eta, Data.Univariate.GARCHt.Params, Data);
+Data.Simulate.t.GARCHt.r = simulateReturnsGARCHGauss(Data.Copula.t.eta, Data.Univariate.GARCHt.Params, Data);
+
+Data.Simulate.Gauss.EGARCHGauss.r = simulateReturnsEGARCHGauss(Data.Copula.Gauss.eta, Data.Univariate.EGARCHGauss.Params, Data);
+Data.Simulate.t.EGARCHGauss.r = simulateReturnsEGARCHGauss(Data.Copula.t.eta, Data.Univariate.EGARCHGauss.Params, Data);
+
+Data.Simulate.Gauss.EGARCHt.r = simulateReturnsEGARCHt(Data.Copula.Gauss.eta, Data.Univariate.EGARCHt.Params, Data);
+Data.Simulate.t.EGARCHt.r = simulateReturnsEGARCHt(Data.Copula.t.eta, Data.Univariate.EGARCHt.Params, Data);
+
 
 
 

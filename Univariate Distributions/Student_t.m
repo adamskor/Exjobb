@@ -11,7 +11,7 @@ function [Data] = Student_t(returns, Data)
             z(:, asset) = (returns(:, asset) - pd.mu)./sqrt(var);
         end
     end
-    Data.Univarite.t.z = z;
+    Data.Univariate.t.z = z;
     Data.Univariate.t.Params = params;
 end
 

@@ -40,8 +40,9 @@ function [Data] = FormatData()
     Data.TimeSeriesOOS.LogReturns = log_returns(in_sample_size + 1:end,:);
     Data.TimeSeriesOOS.Dates = dates(in_sample_size + 1:end,:);
     Data.TimeSeriesOOS.eps = returns(in_sample_size + 1:end,:) - mean(returns(in_sample_size + 1:end,:));
-    Data.TimeSeriesOOS.epsLog = log_returns(in_sample_size + 1:end,:) - mean(log_returns(in_sample_size + 1:end,:));
+    Data.TimeSeriesOOS.epsLog = log_returns(1:in_sample_size,:) - mean(log_returns(in_sample_size + 1:end,:));
     
     Data.Info.Assets = assets;
+    Data.Info.Parameters.simSampleSize = 10000;
 end
 
