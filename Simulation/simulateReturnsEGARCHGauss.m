@@ -1,4 +1,4 @@
-function [r] = simulateReturnsEGARCHGauss(eta, params, Data)
+function [r, Sigma] = simulateReturnsEGARCHGauss(eta, params, Data)
     sample_size = Data.Info.Parameters.simSampleSize;
     r = zeros(sample_size, size(eta, 2), size(eta, 3));
     for window = 1:size(eta, 3)
@@ -18,6 +18,6 @@ function [r] = simulateReturnsEGARCHGauss(eta, params, Data)
             end
         end
     end
-    %Data.Simulate.r = r;
+    Sigma = cov(r);
 end
 

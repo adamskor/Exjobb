@@ -9,6 +9,7 @@ function [Data] = GARCHGauss(returns, eps, Data)
             mu = mean(returns(:,asset,window));
             Mdl = garch('GARCHLags',1,'ARCHLags',1,'Offset', NaN);
             [EstMdl, ~, logL] = estimate(Mdl,returns(:,asset,window));
+            mu = EstMdl.Offset;
             params(:, asset, window) = [EstMdl.Constant, EstMdl.ARCH{1} , EstMdl.GARCH{1}, 0, 0, mu];
             var = zeros(N,1);
             var(1)= sum(returns(:,asset,window).^2)/N;

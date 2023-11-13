@@ -10,7 +10,7 @@ function [Data] = FormatData()
     prices = T_matrix(3:4755, 4:23);
     for t = 1:size(prices,2)
         prices(:,t) = fillmissing(prices(:,t), 'linear'); 
-        %prices(:,t) = flip(prices(:,t));
+        prices(:,t) = flip(prices(:,t));
     end
     returns = zeros(size(prices,1)-1, size(prices,2));
     log_returns = zeros(size(prices,1)-1, size(prices,2));
@@ -43,6 +43,6 @@ function [Data] = FormatData()
     Data.TimeSeriesOOS.epsLog = log_returns(1:in_sample_size,:) - mean(log_returns(in_sample_size + 1:end,:));
     
     Data.Info.Assets = assets;
-    Data.Info.Parameters.simSampleSize = 10000;
+    Data.Info.Parameters.simSampleSize = 4752;
 end
 

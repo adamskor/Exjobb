@@ -1,4 +1,4 @@
-function [r] = simulateReturnsGARCHGauss(eta, params, Data)
+function [r, Sigma] = simulateReturnsGARCHGauss(eta, params, Data)
     sample_size = Data.Info.Parameters.simSampleSize;
     r = zeros(sample_size, size(eta, 2), size(eta, 3));
     for window = 1:size(eta, 3)
@@ -11,10 +11,10 @@ function [r] = simulateReturnsGARCHGauss(eta, params, Data)
             for i = 2:sample_size
                 var(i) = params(1, asset, window) + params(2, asset, window)*(eps(i-1))^2 + params(3, asset, window)*var(i-1);
                 eps(i) = sqrt(var(i))*eta(i, asset, window);
-                r(i, asset, window) = params(6) + eps(i);
+                r(i, asset, window) = params(6, asset, window) + eps(i);
             end
         end
     end
-    %Data.Simulate.r = r;
+    Sigma = cov(r);
 end
 

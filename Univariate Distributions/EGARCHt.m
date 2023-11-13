@@ -18,6 +18,7 @@ function [Data] = EGARCHt(returns, eps, Data)
                          params(2, asset, window)*((abs(eps(i-1, asset, window)))/sqrt(var(i-1)) - ...
                          sqrt((params(5, asset, window) - 2)/ pi)*(gamma((params(5, asset, window) - 1)/2)/gamma((params(5, asset, window))/2))));
                 z(:, asset, window) = (eps(:, asset, window))./sqrt(var);
+                
             end
         LLV(1, asset, window) = logL;
         end

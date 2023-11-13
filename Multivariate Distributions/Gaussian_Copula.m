@@ -18,7 +18,10 @@ function [Data] = Gaussian_Copula(z, Data)
         rho(:, :, window) = copulafit('Gaussian',uniform(:, : ,window));
         sample(:, :, window) = copularnd('Gaussian', rho(:, :, window), sample_size);
     end
+    copula_pdf = copulapdf('Gaussian', uniform, rho);
     Data.Copula.Gauss.Rho = rho;
     Data.Copula.Gauss.eta = norminv(sample);
+    Data.Copula.Gauss.LLV = sum(log(copula_pdf));
+    
 end
 
