@@ -6,7 +6,6 @@ function [Data] = GARCHGauss(returns, eps, Data)
     N = size(returns,1);
     for window = 1:size(returns,3)
         for asset = 1:size(returns, 2)
-            mu = mean(returns(:,asset,window));
             Mdl = garch('GARCHLags',1,'ARCHLags',1,'Offset', NaN);
             [EstMdl, ~, logL] = estimate(Mdl,returns(:,asset,window));
             mu = EstMdl.Offset;

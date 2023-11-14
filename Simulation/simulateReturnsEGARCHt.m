@@ -1,6 +1,6 @@
 function [r, Sigma] = simulateReturnsEGARCHt(eta, params, Data)
     sample_size = Data.Info.Parameters.simSampleSize;
-    sample_size = 4752;
+    sample_size = 1000;
     r = zeros(sample_size, size(eta, 2), size(eta, 3));
     for window = 1:size(eta, 3)
         var = zeros(1, sample_size);
@@ -16,7 +16,6 @@ function [r, Sigma] = simulateReturnsEGARCHt(eta, params, Data)
                          sqrt((params(5, asset, window) - 2)/ pi)*(gamma((params(5, asset, window) - 1)/2)/gamma((params(5, asset, window))/2))));
                 eps(i) = sqrt(var(i))*eta(i, asset, window);
                 r(i, asset, window) = params(6, asset, window) + eps(i);
-                params(6, asset, window) + eps(i);
             end
         end
     end

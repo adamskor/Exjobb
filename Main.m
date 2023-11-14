@@ -1,4 +1,5 @@
 addpath('Statistical Tests', 'Univariate Distributions', 'Multivariate Distributions', 'Simulation', 'Black Litterman')
+%%
 close all
 clear all
 
@@ -65,6 +66,7 @@ clear all
 [Data] = EGARCHt(Data.TimeSeries.Returns, Data.TimeSeries.eps, Data);
 %%
 [Data] = Gaussian_Copula(Data.Univariate.GARCHGauss.z, Data);
+%%
 [Data] = Student_t_Copula(Data.Univariate.EGARCHt.z, Data.Univariate.EGARCHt.Params, Data);
 %%
 [Data.Simulate.t.EGARCHt.r_hat, Data.Simulate.t.EGARCHt.Sigma] = ...
