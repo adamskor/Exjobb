@@ -13,7 +13,7 @@ function [Data] = Student_t_Copula(z, params, Data)
     nu = zeros(1, size(z,3));
     for window = 1:size(z, 3)
         for asset = 1:size(z, 2)
-            uniform(:, asset, window) = rescale(uniform_t(:, asset, window), 0.1, 0.9);
+            uniform(:, asset, window) = rescale(uniform_t(:, asset, window), 0.00001, 0.99999);
         end
     end
     for window = 1:size(z, 3)
@@ -28,11 +28,11 @@ function [Data] = Student_t_Copula(z, params, Data)
             DoF(:, column, window) = params(5, column, window);
         end
     end
-    copula_pdf = copulapdf('t', uniform, rho, nu);
+    %copula_pdf = copulapdf('t', uniform, rho, nu);
     Data.Copula.t.Rho = rho;
     Data.Copula.t.eta = tinv(sample, DoF);
     Data.Copula.t.nu = nu;
-    Data.Copula.t.LLV = sum(log(copula_pdf));
+    %Data.Copula.t.LLV = sum(log(copula_pdf));
     
     function [out] = squeeze(in)
         disp('hello')

@@ -13,8 +13,8 @@ function [Data] = FormatData()
         prices(:,t) = fillmissing(prices(:,t), 'linear'); 
         prices(:,t) = flip(prices(:,t));
     end
-    prices = prices(1:520, :);
-    window_size = 500;
+    %prices = prices(1:1003, :);
+    window_size = 1000;
     returns = zeros(window_size, size(prices,2), size(prices,1)-1 -window_size);
     log_returns = zeros(window_size, size(prices,2), size(prices,1)-1 -window_size);
     returns_temp = zeros(size(prices,1)-1, size(prices,2));
@@ -27,8 +27,8 @@ function [Data] = FormatData()
     end
     
     window = 1;
-    for i = 500:size(returns_temp,1)
-        returns(1:500, :, window) = returns_temp(i-499:i, :);
+    for i = window_size:size(returns_temp,1)
+        returns(1:window_size, :, window) = returns_temp(i-(window_size-1):i, :);
         window = window + 1;
     end
         
@@ -56,6 +56,6 @@ function [Data] = FormatData()
 %     Data.TimeSeriesOOS.epsLog = log_returns(1:in_sample_size,:) - mean(log_returns(in_sample_size + 1:end,:));
     
     Data.Info.Assets = assets;
-    Data.Info.Parameters.simSampleSize = 4752;
+    Data.Info.Parameters.simSampleSize = 10000;
 end
 
