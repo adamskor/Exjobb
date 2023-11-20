@@ -1,11 +1,17 @@
-function [q, Lambda, P, Sigma] = InvestorViews(Sigma, Pi, Data)
-    nAssets = size(Sigma,1);
-    P = eye(nAssets);
-    Xi = ones(1,20);
-    
-    q = (Pi*252 + sqrt(diag(Sigma)))/252
-    q = Pi + 0.0001;
+function [Data] = InvestorViews(Sigma, Pi, Data)
+    q = zeros(1, size(Pi, 2), size(Pi, 3));
+    for window = 1:size(Pi, 3)
+       P = eye(size(Pi, 2));
+       q(1, :, window) = (P*Pi(:, :, window)')' + abs(normrnd(0, 0.005));      
+    end
+    Data.BL.q = q;
+    Data.BL.Lambda = Sigma;
 
-    Lambda = P*Sigma*P';
+
+
+
+
+
+
 end
 

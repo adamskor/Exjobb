@@ -2,6 +2,9 @@ function [Data] = FormatData()
     %DATA Summary of this function goes here
     %   Detailed explanation goes here
     in_sample_size = 3290;
+    window_size = 1000;
+    Data.Info.sigLevel = 0.99;
+    Data.Info.Parameters.simSampleSize = 1000;
     T_table = readtable("Data.xlsx");
     T_matrix = readmatrix("Data.xlsx");
     assets = ["AIRP", "BRKa", "CPRI", "COLOb", "DGE", "EL", "GEBN", "HEIN", "HRMS", "KNEBV", ...
@@ -13,8 +16,10 @@ function [Data] = FormatData()
         prices(:,t) = fillmissing(prices(:,t), 'linear'); 
         prices(:,t) = flip(prices(:,t));
     end
-    %prices = prices(1:1003, :);
-    window_size = 1000;
+    prices = prices(1:1030, :);
+    Data.Info.nWindows = size(prices, 1) - window_size;
+    Data.Info.WindowSize = window_size;
+    Data.Info.nAssets = size(prices,2);
     returns = zeros(window_size, size(prices,2), size(prices,1)-1 -window_size);
     log_returns = zeros(window_size, size(prices,2), size(prices,1)-1 -window_size);
     returns_temp = zeros(size(prices,1)-1, size(prices,2));
@@ -39,6 +44,8 @@ function [Data] = FormatData()
     Data.TimeSeries.Dates = dates;
     Data.TimeSeries.eps = returns - mean(returns);
     Data.TimeSeries.epsLog = log_returns - mean(log_returns);
+    Data.TimeSeries.meanCVaR = 8.233998e-02;
+    Data.TimeSeries.RFrate = ones(size(prices, 1) - window_size, 1)*0.005/252;
     
 %     Data.TimeSeriesIS.Prices = prices(1:in_sample_size,:);
 %     Data.TimeSeriesIS.Returns = returns(1:in_sample_size,:);
@@ -56,6 +63,7 @@ function [Data] = FormatData()
 %     Data.TimeSeriesOOS.epsLog = log_returns(1:in_sample_size,:) - mean(log_returns(in_sample_size + 1:end,:));
     
     Data.Info.Assets = assets;
-    Data.Info.Parameters.simSampleSize = 10000;
+    %Data.Info.Parameters.simSampleSize = 10000;
+    
 end
 
