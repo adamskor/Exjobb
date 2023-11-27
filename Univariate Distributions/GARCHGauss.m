@@ -1,4 +1,3 @@
-
 function [Data] = GARCHGauss(returns, eps, Data)
     z = zeros(size(returns,1), size(returns,2), size(returns,3));
     LLV = zeros(1, size(returns,2), size(returns,3));
@@ -23,5 +22,3 @@ function [Data] = GARCHGauss(returns, eps, Data)
     Data.Univariate.GARCHGauss.Params = params;
     Data.Univariate.GARCHGauss.LLV = LLV;
 end
-
-

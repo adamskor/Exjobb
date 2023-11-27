@@ -5,6 +5,7 @@ function [Data] = GARCHt(returns, eps, Data)
     params = zeros(6, size(returns,2), size(returns,3));
     N = size(returns, 1);
     for window = 1:size(returns, 3)
+        disp(window)
         for asset = 1:size(returns, 2)
             mu = mean(returns(:, asset, window));
             Mdl = garch('GARCHLags',1,'ARCHLags',1,'Offset', NaN);

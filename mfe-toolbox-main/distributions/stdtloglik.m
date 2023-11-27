@@ -17,7 +17,7 @@ function [ll,lls]=stdtloglik(x,mu,sigma2,nu)
 % COMMENTS:
 %   V>2
 %
-% REFERENCES:
+% REFERENCES: 
 %   [1] Cassella and Berger (1990) 'Statistical Inference'
 %
 % See also STDTCDF, STDTINV, STDTRND, STDTPDF  

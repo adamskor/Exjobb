@@ -1,5 +1,5 @@
-function [h_0, pValue] = EngleArchTest(data, plotting)
-    returns = data.returns;
+function [h_0, pValue] = EngleArchTest(Data, plotting)
+    returns = Data.TimeSeries.allReturns;
     h_0 = zeros(1, size(returns, 2));
     pValue = zeros(1, size(returns, 2));
     res = zeros(size(returns, 1), size(returns, 2));
