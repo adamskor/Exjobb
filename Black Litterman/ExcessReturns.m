@@ -10,9 +10,9 @@ function [Data] = ExcessReturns(Sigma, Data)
         Beq = 1;
         opts = optimoptions('lsqlin','Algorithm','interior-point', 'Display',"off");
         wtsMarket = lsqlin(returns, marketReturns, [], [], Aeq, Beq, LB, [], [], opts);
-        shpr = mean(marketReturns)/std(marketReturns);
-        %shpr = 0.5/(sqrt(252));
-        delta = shpr/sqrt(wtsMarket'*Sigma(:,:,window)*wtsMarket);
+        %shpr = mean(marketReturns)/std(marketReturns);
+        shpr = 0.5/(sqrt(252));
+        delta = (shpr)/(sqrt(wtsMarket'*Sigma(:,:,window)*wtsMarket));
         Pi(1, :, window) = delta*Sigma(:,:,window)*wtsMarket;
         Data.BL.Pi = Pi;
     end

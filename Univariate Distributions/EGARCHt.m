@@ -11,7 +11,7 @@ function [Data] = EGARCHt(returns, eps, Data, haveParams)
         disp(window)
         for asset = 1:size(returns, 2)
             mu = mean(returns(:,asset,window));
-            if ~haveParams            
+            if haveParams ~= 1          
                 options  =  optimset('fmincon');
                 options  =  optimset(options , 'Display'     , 'off');
                 [parameters, LL] = egarch_mfe(returns(:,asset,window), 1, 1, 1, 'STUDENTST',[], options);
@@ -35,9 +35,16 @@ function [Data] = EGARCHt(returns, eps, Data, haveParams)
             end
         end
     end
-    Data.Univariate.EGARCHt.z = z;
-    Data.Univariate.EGARCHt.var = var;
-    Data.Univariate.EGARCHt.Params = params;
-    Data.Univariate.EGARCHt.LLV = LLV;
+    if haveParams == 2
+        Data.MktCorr.EGARCHt.z = z;
+        Data.MktCorr.EGARCHt.var = var;
+        Data.MktCorr.EGARCHt.Params = params;
+        Data.MktCorr.EGARCHt.LLV = LLV;
+    else
+        Data.Univariate.EGARCHt.z = z;
+        Data.Univariate.EGARCHt.var = var;
+        Data.Univariate.EGARCHt.Params = params;
+        Data.Univariate.EGARCHt.LLV = LLV;
+    end
 end
 
