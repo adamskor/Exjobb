@@ -25,4 +25,4 @@ h.ColorbarVisible = 'off';
 
 h.Title = 'Estimated correlation matrix from Student´s-t copula';
 annotation('rectangle',[0 0 1 1],'Color','k');
-exportgraphics(gca,strcat('Cop_Corr_Matrix.eps'),"Resolution",600)
+exportgraphics(gca,strcat('Cop_Corr_Matrix.jpg'),"Resolution",600)
